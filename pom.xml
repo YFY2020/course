@@ -41,12 +41,20 @@
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>1.3.2</version>
             </dependency>
+            <!--mysql驱动-->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>5.1.37</version>
             </dependency>
+            <!--集成server模块-->
+            <dependency>
+                <groupId>com.course</groupId>
+                <artifactId>server</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
         </dependencies>
+
     </dependencyManagement>
 
     <build>
