@@ -1,4 +1,4 @@
-package com.course.server.domain.dto;
+package com.course.server.dto;
 
 public class ChapterDto {
     private String id;
