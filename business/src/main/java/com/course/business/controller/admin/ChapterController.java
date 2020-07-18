@@ -17,6 +17,7 @@ import java.util.List;
 public class ChapterController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ChapterController.class);
+    public static final String BUSINESS_NAME="大章";
 
     @Resource
     private ChapterService chapterService;
