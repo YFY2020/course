@@ -12,7 +12,7 @@ public class DbUtil {
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/course";
+            String url = "jdbc:mysql://localhost:3306/course_db";
             String user = "root";
             String pass = "123456";
             conn = DriverManager.getConnection(url, user, pass);
