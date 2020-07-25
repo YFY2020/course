@@ -43,7 +43,8 @@
         <!--生成的表-->
        <!-- <table tableName="test" domainObjectName="Test"/>-->
        <!-- <table tableName="chapter" domainObjectName="Chapter"/>-->
-        <table tableName="section" domainObjectName="Section"/>
+       <!-- <table tableName="section" domainObjectName="Section"/>-->
+        <table tableName="course" domainObjectName="Course"/>
 
     </context>
 </generatorConfiguration>
