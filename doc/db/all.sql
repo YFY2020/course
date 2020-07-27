@@ -40,9 +40,9 @@ CREATE TABLE section (
 )engine =innodb default charset =utf8mb4 comment='小节';
 
 INSERT INTO section (id, title, course_id, chapter_id, video, time, charge, sort, created_at, updated_at)
-VALUES ('00000001','测试小节01','00000001','00000000','',500,'F',1,now(),now());
+VALUES ('00000001','测试小节01','00000001','00000001','',500,'F',1,now(),now());
 INSERT INTO section (id, title, course_id, chapter_id, video, time, charge, sort, created_at, updated_at)
-VALUES ('00000002','测试小节02','00000001','00000000','',500,'F',1,now(),now());
+VALUES ('00000002','测试小节02','00000001','00000001','',500,'F',1,now(),now());
 
 -- 课程
 drop table if exists course;
