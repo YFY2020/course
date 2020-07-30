@@ -16,8 +16,8 @@
     <div class="row">
       <div v-for="course in courses" class="col-md-4">
         <div class="thumbnail search-thumbnail">
-          <img v-show="!course.image" class="media-object" src="/static/image/demo-course.jpg" />
-          <img v-show="course.image" class="media-object" v-bind:src="course.image" />
+          <img v-show="!course.image" class="media-object" src="/static/image/demo-course.jpg"/>
+          <img v-show="course.image" class="media-object" v-bind:src="course.image"/>
           <div class="caption">
             <div class="clearfix">
                <span class="pull-right label label-primary info-label">
@@ -166,12 +166,13 @@
                 COURSE_LEVEL: COURSE_LEVEL,
                 COURSE_CHARGE: COURSE_CHARGE,
                 COURSE_STATUS: COURSE_STATUS,
+                categorys: [],
             }
         },
         mounted: function () {
             let _this = this;
             _this.$refs.pagination.size = 5;
-            _this.initTree();
+            _this.allCategory();
             _this.list(1);
             //sidebar激活样式 方法1
             //this.$parent.activeSidebar("business-course-sidebar");
@@ -269,33 +270,36 @@
                 SessionStorage.set("course", course);
                 _this.$router.push("/business/chapter");
             },
+            /**
+             * 查询分类
+             */
+            allCategory() {
+                let _this = this;
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/category/all').then((response) => {
+                    Loading.hide();
+                    let resp = response.data;
+                    _this.categorys = resp.content;
+                    _this.initTree();
+                })
+            },
             initTree() {
+                let _this = this;
                 let setting = {
                     check: {
                         enable: true
                     },
                     data: {
                         simpleData: {
+                            idKey: "id",
+                            pIdKey: "parent",
+                            rootPId: "00000000",
                             enable: true
                         }
                     }
                 };
 
-                let zNodes =[
-                    { id:1, pId:0, name:"随意勾选 1", open:true},
-                    { id:11, pId:1, name:"随意勾选 1-1", open:true},
-                    { id:111, pId:11, name:"随意勾选 1-1-1"},
-                    { id:112, pId:11, name:"随意勾选 1-1-2"},
-                    { id:12, pId:1, name:"随意勾选 1-2", open:true},
-                    { id:121, pId:12, name:"随意勾选 1-2-1"},
-                    { id:122, pId:12, name:"随意勾选 1-2-2"},
-                    { id:2, pId:0, name:"随意勾选 2", checked:true, open:true},
-                    { id:21, pId:2, name:"随意勾选 2-1"},
-                    { id:22, pId:2, name:"随意勾选 2-2", open:true},
-                    { id:221, pId:22, name:"随意勾选 2-2-1", checked:true},
-                    { id:222, pId:22, name:"随意勾选 2-2-2"},
-                    { id:23, pId:2, name:"随意勾选 2-3"}
-                ];
+                let zNodes = _this.categorys;
                 $.fn.zTree.init($("#tree"), setting, zNodes);
             }
         }
