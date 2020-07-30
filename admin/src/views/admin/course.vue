@@ -57,87 +57,6 @@
       </div>
     </div>
 
- <!--   <table id="simple-table" class="table  table-bordered table-hover">
-      <thead>
-      <tr>
-        <th>id</th>
-        <th>名称</th>
-        <th>概述</th>
-        <th>时长</th>
-        <th>价格（元）</th>
-        <th>封面</th>
-        <th>级别</th>
-        <th>收费</th>
-        <th>状态</th>
-        <th>报名数</th>
-        <th>顺序</th>
-        <th>操作</th>
-      </tr>
-      </thead>
-
-      <tbody>
-      <tr v-for="course in courses">
-        <td>{{course.id}}</td>
-        <td>{{course.name}}</td>
-        <td>{{course.summary}}</td>
-        <td>{{course.time}}</td>
-        <td>{{course.price}}</td>
-        <td>{{course.image}}</td>
-        <td>{{COURSE_LEVEL | optionKV(course.level)}}</td>
-        <td>{{COURSE_CHARGE | optionKV(course.charge)}}</td>
-        <td>{{COURSE_STATUS | optionKV(course.status)}}</td>
-        <td>{{course.enroll}}</td>
-        <td>{{course.sort}}</td>
-        <td>
-          <div class="hidden-sm hidden-xs btn-group">
-            <button v-on:click="edit(course)" class="btn btn-xs btn-info">
-              <i class="ace-icon fa fa-pencil bigger-120"></i>
-            </button>
-
-            <button v-on:click="del(course.id)" class="btn btn-xs btn-danger">
-              <i class="ace-icon fa fa-trash-o bigger-120"></i>
-            </button>
-          </div>
-
-          <div class="hidden-md hidden-lg">
-            <div class="inline pos-rel">
-              <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-              </button>
-
-              <ul
-                class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                <li>
-                  <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-                                          <span class="blue">
-                                            <i class="ace-icon fa fa-search-plus bigger-120"></i>
-                                          </span>
-                  </a>
-                </li>
-
-                <li>
-                  <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-                                          <span class="green">
-                                            <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-                                          </span>
-                  </a>
-                </li>
-
-                <li>
-                  <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                          <span class="red">
-                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                          </span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>-->
-
     <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -148,6 +67,14 @@
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">
+                  分类
+                </label>
+                <div class="col-sm-10">
+                  <ul id="tree" class="ztree"></ul>
+                </div>
+              </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">名称</label>
                 <div class="col-sm-10">
@@ -244,7 +171,8 @@
         mounted: function () {
             let _this = this;
             _this.$refs.pagination.size = 5;
-            _this.list(1)
+            _this.initTree();
+            _this.list(1);
             //sidebar激活样式 方法1
             //this.$parent.activeSidebar("business-course-sidebar");
         },
@@ -340,6 +268,35 @@
                 let _this = this;
                 SessionStorage.set("course", course);
                 _this.$router.push("/business/chapter");
+            },
+            initTree() {
+                let setting = {
+                    check: {
+                        enable: true
+                    },
+                    data: {
+                        simpleData: {
+                            enable: true
+                        }
+                    }
+                };
+
+                let zNodes =[
+                    { id:1, pId:0, name:"随意勾选 1", open:true},
+                    { id:11, pId:1, name:"随意勾选 1-1", open:true},
+                    { id:111, pId:11, name:"随意勾选 1-1-1"},
+                    { id:112, pId:11, name:"随意勾选 1-1-2"},
+                    { id:12, pId:1, name:"随意勾选 1-2", open:true},
+                    { id:121, pId:12, name:"随意勾选 1-2-1"},
+                    { id:122, pId:12, name:"随意勾选 1-2-2"},
+                    { id:2, pId:0, name:"随意勾选 2", checked:true, open:true},
+                    { id:21, pId:2, name:"随意勾选 2-1"},
+                    { id:22, pId:2, name:"随意勾选 2-2", open:true},
+                    { id:221, pId:22, name:"随意勾选 2-2-1", checked:true},
+                    { id:222, pId:22, name:"随意勾选 2-2-2"},
+                    { id:23, pId:2, name:"随意勾选 2-3"}
+                ];
+                $.fn.zTree.init($("#tree"), setting, zNodes);
             }
         }
     }
