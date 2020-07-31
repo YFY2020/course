@@ -120,3 +120,13 @@ insert into category (id, parent, name, sort) values ('00000405','00000400','数
 insert into category (id, parent, name, sort) values ('00000500','00000000','云计算&大数据',500);
 insert into category (id, parent, name, sort) values ('00000501','00000500','大数据',501);
 insert into category (id, parent, name, sort) values ('00000502','00000500','hadoop',502);
+
+
+-- 课程分类
+drop table if exists  course_category;
+create table course_category (
+  id char(8) not null default '' comment 'id',
+  course_id char(8) comment '课程|course.id',
+  category_id char(8) comment '分类|course.id',
+  primary key(id)
+) engine=innodb default charset=utf8mb4 comment='课程分类';
