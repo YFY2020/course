@@ -88,6 +88,14 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-sm-2 control-label">讲师</label>
+                <div class="col-sm-10">
+                  <select v-model="course.teacherId" class="form-control">
+                    <option v-for="o in teachers" v-bind:value="o.id">{{o.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-sm-2 control-label">概述</label>
                 <div class="col-sm-10">
                   <input v-model="course.summary" class="form-control">
@@ -197,7 +205,8 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">排序</h4>
           </div>
           <div class="modal-body">
@@ -252,18 +261,20 @@
                 COURSE_STATUS: COURSE_STATUS,
                 categorys: [],
                 tree: {},
-                saveContentLabel:"",
+                saveContentLabel: "",
                 sort: {
                     id: "",
                     oldSort: 0,
                     newSort: 0
-                }
+                },
+                teachers: [],
             }
         },
         mounted: function () {
             let _this = this;
             _this.$refs.pagination.size = 5;
             _this.allCategory();
+            _this.allTeacher();
             _this.list(1);
             //sidebar激活样式 方法1
             //this.$parent.activeSidebar("business-course-sidebar");
@@ -275,7 +286,7 @@
             add() {
                 let _this = this;
                 _this.course = {
-                    sort:_this.$refs.pagination.total+1
+                    sort: _this.$refs.pagination.total + 1
                 };
                 _this.tree.checkAllNodes(false);
                 $("#form-modal").modal("show");
@@ -456,11 +467,11 @@
                         }
 
                         //定时自动保存,每5秒保存一次
-                        let saveContentInterval = setInterval(function(){
+                        let saveContentInterval = setInterval(function () {
                             _this.saveContent();
-                        },5000);
+                        }, 5000);
                         //关闭内容框时，清空自动保存任务
-                        $('#course-content-modal').on('hidden .bs.modal',function (e) {
+                        $('#course-content-modal').on('hidden .bs.modal', function (e) {
                             clearInterval(saveContentInterval);
                         })
                     } else {
@@ -476,18 +487,18 @@
                 let _this = this;
                 let content = $("#content").summernote("code");
 
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/save-content/'+{
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/save-content/' + {
                     id: _this.course.id,
                     content: content
-                }).then((response)=>{
+                }).then((response) => {
                     Loading.hide();
                     let resp = response.data;
-                    if(resp.success){
+                    if (resp.success) {
                         //Toast.success("内容保存成功");
                         //let now = Tool.dateFormat("yyyy-MM-dd hh:mm:ss");
                         let now = Tool.dateFormat("mm:ss");
-                        _this.saveContentLabel = "最后保存时间："+now;
-                    }else{
+                        _this.saveContentLabel = "最后保存时间：" + now;
+                    } else {
                         Toast.warning(resp.message);
                     }
                 });
@@ -523,7 +534,16 @@
                         Toast.error("更新排序失败");
                     }
                 });
-            }
+            },
+            allTeacher() {
+                let _this = this;
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/teacher/all').then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    _this.teachers = resp.content;
+                })
+            },
         }
     }
 </script>
