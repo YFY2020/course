@@ -545,7 +545,7 @@
             },
             afterUpload(resp) {
                 let _this = this;
-                let image = resp.content.path;
+                let image = resp.content;
                 _this.course.image = image;
             },
             /**
