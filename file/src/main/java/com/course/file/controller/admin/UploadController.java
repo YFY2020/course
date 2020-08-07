@@ -8,7 +8,6 @@ import com.course.server.util.Base64ToMultipartFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +36,7 @@ public class UploadController {
     private FileService fileService;
 
     @RequestMapping("/upload")
-    public ResponseDto upload(@RequestBody FileDto fileDto) throws IOException {
+    public ResponseDto upload(@RequestBody FileDto fileDto) throws Exception {
         LOG.info("上传文件开始：{}");
         String use = fileDto.getUse();
         String key = fileDto.getKey();
@@ -55,16 +54,20 @@ public class UploadController {
             fullDir.mkdir();
         }
 
-       // String path = dir + File.separator + key + "." + suffix + "." + fileDto.getShardIndex();
+        // String path = dir + File.separator + key + "." + suffix + "." + fileDto.getShardIndex();
         String path = new StringBuffer(dir)
                 .append(File.separator)
                 .append(key)
                 .append(".")
                 .append(suffix)
+                .toString();  // course\***.mp4
+
+        String localPath = new StringBuffer(path)
                 .append(".")
                 .append(fileDto.getShardIndex())
-                .toString();
-        String fullPath = FILE_PATH + path;
+                .toString();  // course\***.mp4.1
+
+        String fullPath = FILE_PATH + localPath;
         File dest = new File(fullPath);
         shard.transferTo(dest);
         LOG.info(dest.getAbsolutePath());
@@ -74,28 +77,35 @@ public class UploadController {
         fileService.save(fileDto);
 
         ResponseDto responseDto = new ResponseDto();
-        responseDto.setContent(FILE_DOMAIN + path);
+        fileDto.setPath(FILE_DOMAIN + path);
+        responseDto.setContent(fileDto);
+        // responseDto.setContent(FILE_DOMAIN + path);
+
+
+        if(fileDto.getShardIndex() == fileDto.getShardTotal()){
+            this.merge(fileDto);
+        }
         return responseDto;
     }
 
-    @GetMapping(value = "/merge", produces = {"application/json;charset=UTF-8"})
-    public ResponseDto merge() throws Exception {
-        File newFile = new File(FILE_PATH + "/course/test123.mp4");
-        FileOutputStream outputStream = new FileOutputStream(newFile, true);//文件追加写入
+    //@GetMapping(value = "/merge", produces = {"application/json;charset=UTF-8"})
+    public void merge(FileDto fileDto) throws Exception {
+        LOG.info("合并分片开始");
+        String path = fileDto.getPath();
+        path = path.replace(FILE_DOMAIN,"");   // course\***.mp4
+        Integer shardTotal = fileDto.getShardTotal();
+        File newFile = new File(FILE_PATH + path);
+        FileOutputStream outputStream = new FileOutputStream(newFile, true); //文件追加写入
         FileInputStream fileInputStream = null;// 分片文件
         byte[] byt = new byte[10 * 1024 * 1024];
         int len;
         try {
-            //读取第一个分片
-            fileInputStream = new FileInputStream(new File(FILE_PATH + "/course/Bc0SXtFn.blob"));
-            while ((len = fileInputStream.read(byt)) != -1) {
-                outputStream.write(byt, 0, len);
-            }
-
-            //读取第一个分片
-            fileInputStream = new FileInputStream(new File(FILE_PATH + "/course/roQbPm2x.blob"));
-            while ((len = fileInputStream.read(byt)) != -1) {
-                outputStream.write(byt, 0, len);
+            for (int i = 0; i < shardTotal; i++) {
+                //读取第i个分片
+                fileInputStream = new FileInputStream(new File(FILE_PATH + path+"."+(i+1))); // course\***.mp4.1
+                while ((len = fileInputStream.read(byt)) != -1) {
+                    outputStream.write(byt, 0, len);
+                }
             }
         } catch (IOException e) {
             LOG.error("分片合并异常", e);
@@ -110,9 +120,6 @@ public class UploadController {
                 LOG.error("IO流关闭", e);
             }
         }
-
-        ResponseDto responseDto = new ResponseDto();
-        return responseDto;
+        LOG.info("合并分片结束");
     }
-
 }
