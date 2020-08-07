@@ -43,7 +43,7 @@ public class UploadController {
         String key = fileDto.getKey();
         String suffix = fileDto.getSuffix();
         String shardBase64 = fileDto.getShard();
-        MultipartFile shard  = Base64ToMultipartFile.base64ToMultipart(shardBase64);
+        MultipartFile shard = Base64ToMultipartFile.base64ToMultipart(shardBase64);
 
         //保存文件到本地
         FileUseEnum useEnum = FileUseEnum.getByCode(use);
@@ -55,7 +55,15 @@ public class UploadController {
             fullDir.mkdir();
         }
 
-        String path = dir + File.separator + key + "." + suffix;
+       // String path = dir + File.separator + key + "." + suffix + "." + fileDto.getShardIndex();
+        String path = new StringBuffer(dir)
+                .append(File.separator)
+                .append(key)
+                .append(".")
+                .append(suffix)
+                .append(".")
+                .append(fileDto.getShardIndex())
+                .toString();
         String fullPath = FILE_PATH + path;
         File dest = new File(fullPath);
         shard.transferTo(dest);
