@@ -38,7 +38,7 @@
                 let formData = new window.FormData();
                 let file = _this.$refs.file.files[0];
 
-                console.log(file);
+                console.log(JSON.stringify(file));
                 /*
                   name: "test.mp4"
                   lastModified: 1901173357457
