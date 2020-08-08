@@ -78,7 +78,7 @@
                 }
 
                 //分件分片
-                let shardSize = 20 * 1024 * 1024;    //以20MB为一个分片
+                let shardSize = 10 * 1024 * 1024;    //以10MB为一个分片
                 let shardIndex = 1;		//分片索引,1表示第一个分片
                 let size = file.size;
                 let shardTotal = Math.ceil(size / shardSize); //总片数
@@ -97,36 +97,69 @@
                 _this.upload(param);
             },
 
-            upload: function (param) {
+            /**
+             * 检查文件状态，是否已上传过？传到第几个分片？
+             */
+            check (param) {
+                let _this = this;
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/file/admin/check/' + param.key).then((response)=>{
+                    let resp = response.data;
+                    if (resp.success) {
+                        let obj = resp.content;
+                        if (!obj) {
+                            param.shardIndex = 1;
+                            console.log("没有找到文件记录，从分片1开始上传");
+                            _this.upload(param);
+                        } else if (obj.shardIndex === obj.shardTotal) {
+                            // 已上传分片 = 分片总数，说明已全部上传完，不需要再上传
+                            Toast.success("文件极速秒传成功！");
+                            _this.afterUpload(resp);
+                            $("#" + _this.inputId + "-input").val("");
+                        }  else {
+                            param.shardIndex = obj.shardIndex + 1;
+                            console.log("找到文件记录，从分片" + param.shardIndex + "开始上传");
+                            _this.upload(param);
+                        }
+                    } else {
+                        Toast.warning("文件上传失败");
+                        $("#" + _this.inputId + "-input").val("");
+                    }
+                })
+            },
+
+            /**
+             * 将分片数据转成base64进行上传
+             */
+            upload (param) {
                 let _this = this;
                 let shardIndex = param.shardIndex;
                 let shardTotal = param.shardTotal;
                 let shardSize = param.shardSize;
                 let fileShard = _this.getFileShard(shardIndex, shardSize);
-                //将图片转为base64进行传输
+                // 将图片转为base64进行传输
                 let fileReader = new FileReader();
+
+                Progress.show(parseInt((shardIndex - 1) * 100 / shardTotal));
                 fileReader.onload = function (e) {
                     let base64 = e.target.result;
-                    //console.log("base64:", base64);
+                    // console.log("base64:", base64);
+
                     param.shard = base64;
 
-                    Loading.show();
-                    _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', param).then((response) => {
-                        Loading.hide();
+                    _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/' + _this.url, param).then((response) => {
                         let resp = response.data;
                         console.log("上传文件成功：", resp);
+                        Progress.show(parseInt(shardIndex * 100 / shardTotal));
                         if (shardIndex < shardTotal) {
-                            //上传下一个分片
-                              param.shardIndex = param.shardIndex+1;
-                              _this.upload(param);
-
+                            // 上传下一个分片
+                            param.shardIndex = param.shardIndex + 1;
+                            _this.upload(param);
                         } else {
+                            Progress.hide();
                             _this.afterUpload(resp);
                             $("#" + _this.inputId + "-input").val("");
                         }
-
                     });
-
                 };
                 fileReader.readAsDataURL(fileShard);
             },

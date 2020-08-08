@@ -8,9 +8,7 @@ import com.course.server.util.Base64ToMultipartFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -82,7 +80,7 @@ public class UploadController {
         // responseDto.setContent(FILE_DOMAIN + path);
 
 
-        if(fileDto.getShardIndex() == fileDto.getShardTotal()){
+        if (fileDto.getShardIndex() == fileDto.getShardTotal()) {
             this.merge(fileDto);
         }
         return responseDto;
@@ -92,7 +90,7 @@ public class UploadController {
     public void merge(FileDto fileDto) throws Exception {
         LOG.info("合并分片开始");
         String path = fileDto.getPath();
-        path = path.replace(FILE_DOMAIN,"");   // course\***.mp4
+        path = path.replace(FILE_DOMAIN, "");   // course\***.mp4
         Integer shardTotal = fileDto.getShardTotal();
         File newFile = new File(FILE_PATH + path);
         FileOutputStream outputStream = new FileOutputStream(newFile, true); //文件追加写入
@@ -102,7 +100,7 @@ public class UploadController {
         try {
             for (int i = 0; i < shardTotal; i++) {
                 //读取第i个分片
-                fileInputStream = new FileInputStream(new File(FILE_PATH + path+"."+(i+1))); // course\***.mp4.1
+                fileInputStream = new FileInputStream(new File(FILE_PATH + path + "." + (i + 1))); // course\***.mp4.1
                 while ((len = fileInputStream.read(byt)) != -1) {
                     outputStream.write(byt, 0, len);
                 }
@@ -126,12 +124,23 @@ public class UploadController {
 
         //删除分片
         LOG.info("删除分片开始");
-        for(int i = 0;i<shardTotal;i++){
-            String filePath = FILE_PATH+path+"."+(i+1);
-            File file  = new File(filePath);
-            boolean result  = file.delete();
-            LOG.info("删除{},{}",filePath,result?"成功":"失败");
+        for (int i = 0; i < shardTotal; i++) {
+            String filePath = FILE_PATH + path + "." + (i + 1);
+            File file = new File(filePath);
+            boolean result = file.delete();
+            LOG.info("删除{},{}", filePath, result ? "成功" : "失败");
         }
         LOG.info("删除分片结束");
     }
+
+    @GetMapping("/check/{key}")
+    public ResponseDto check(@PathVariable String key) {
+        LOG.info("检查上传分片开始：{}",key);
+        ResponseDto responseDto = new ResponseDto();
+        FileDto fileDto = fileService.findByKey(key);
+        responseDto.setContent(fileDto);
+        return responseDto;
+    }
+
+
 }
