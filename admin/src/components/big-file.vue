@@ -24,6 +24,12 @@
             use: {
                 default: ""
             },
+            shardSize: {
+                default: 50 * 1024
+            },
+            url: {
+                default: "oss-append"
+            },
             afterUpload: {
                 type: Function,
                 default: null
@@ -78,8 +84,9 @@
                 }
 
                 //分件分片
-               // let shardSize = 10 * 1024 * 1024;    //以10MB为一个分片
-                let shardSize = 50 * 1024;    //以50k为一个分片
+                // let shardSize = 10 * 1024 * 1024;    //以10MB为一个分片
+               // let shardSize = 50 * 1024;    //以50k为一个分片
+                let shardSize = _this.shardSize;
                 let shardIndex = 1;		//分片索引,1表示第一个分片
                 let size = file.size;
                 let shardTotal = Math.ceil(size / shardSize); //总片数
@@ -101,9 +108,9 @@
             /**
              * 检查文件状态，是否已上传过？传到第几个分片？
              */
-            check (param) {
+            check(param) {
                 let _this = this;
-                _this.$ajax.get(process.env.VUE_APP_SERVER + '/file/admin/check/' + param.key).then((response)=>{
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/file/admin/check/' + param.key).then((response) => {
                     let resp = response.data;
                     if (resp.success) {
                         let obj = resp.content;
@@ -116,7 +123,7 @@
                             Toast.success("文件极速秒传成功！");
                             _this.afterUpload(resp);
                             $("#" + _this.inputId + "-input").val("");
-                        }  else {
+                        } else {
                             param.shardIndex = obj.shardIndex + 1;
                             console.log("找到文件记录，从分片" + param.shardIndex + "开始上传");
                             _this.upload(param);
@@ -131,7 +138,7 @@
             /**
              * 将分片数据转成base64进行上传
              */
-            upload (param) {
+            upload(param) {
                 let _this = this;
                 let shardIndex = param.shardIndex;
                 let shardTotal = param.shardTotal;
@@ -147,7 +154,7 @@
 
                     param.shard = base64;
 
-                    _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/oss-append', param).then((response) => {
+                    _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/'+_this.url, param).then((response) => {
                         let resp = response.data;
                         console.log("上传文件成功：", resp);
                         Progress.show(parseInt(shardIndex * 100 / shardTotal));
