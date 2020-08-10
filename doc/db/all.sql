@@ -178,6 +178,7 @@ alter table file add column (shard_size int comment '分片大小|B');
 alter table file add column (shard_total int comment '分片总数');
 alter table file add column (`key` varchar(32)  comment '文件标识');
 alter table file add unique key key_unique(`key`);
+alter table file add column (vod char(32) comment 'vod|阿里云vod');
 
 -- 课程内容文件
 drop table if exists course_content_file;
