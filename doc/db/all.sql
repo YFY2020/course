@@ -39,6 +39,10 @@ CREATE TABLE section (
    PRIMARY KEY (id)
 )engine =innodb default charset =utf8mb4 comment='小节';
 
+ALTER TABLE  section ADD COLUMN (
+  vod CHAR(32) COMMENT 'VOD|阿里云VOD'
+);
+
 INSERT INTO section (id, title, course_id, chapter_id, video, time, charge, sort, created_at, updated_at)
 VALUES ('00000001','测试小节01','00000001','00000001','',500,'F',1,now(),now());
 INSERT INTO section (id, title, course_id, chapter_id, video, time, charge, sort, created_at, updated_at)
