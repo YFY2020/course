@@ -251,7 +251,8 @@
              */
             save(page) {
                 let _this = this;
-
+                _this.section.video = "";
+``
                 // 保存校验
                 if (1 != 1
                     || !Validator.require(_this.section.title, "标题")
@@ -298,8 +299,10 @@
             },
             afterUpload(resp) {
                 let _this = this;
-                let video = resp.content;
+                let video = resp.content.path;
+                let vod = resp.content.vod;
                 _this.section.video = video;
+                _this.section.vod = vod;
                 _this.getTime();
             },
             /**
@@ -309,6 +312,7 @@
                 let _this = this;
                 setTimeout(function () {
                     let ele = document.getElementById("video");
+                    console.log(ele);
                     _this.section.time = parseInt(ele.duration, 10);
                 }, 1000);
             },
