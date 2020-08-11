@@ -1,12 +1,13 @@
 package com.course.system.controller.admin;
 
-import com.course.server.dto.UserDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
+import com.course.server.dto.UserDto;
 import com.course.server.service.UserService;
 import com.course.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -38,11 +39,12 @@ public class UserController {
      */
     @PostMapping(value = "/save",produces = {"application/json;charset=UTF-8"})
     public ResponseDto save(@RequestBody UserDto userDto){
+        userDto.setPassword(DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes()));
         // 保存校验
-                    ValidatorUtil.require(userDto.getLoginName(), "登录名");
-                    ValidatorUtil.length(userDto.getLoginName(), "登录名", 1, 50);
-                    ValidatorUtil.length(userDto.getName(), "昵称", 1, 50);
-                    ValidatorUtil.require(userDto.getPassword(), "密码");
+        ValidatorUtil.require(userDto.getLoginName(), "登录名");
+        ValidatorUtil.length(userDto.getLoginName(), "登录名", 1, 50);
+        ValidatorUtil.length(userDto.getName(), "昵称", 1, 50);
+        ValidatorUtil.require(userDto.getPassword(), "密码");
 
         ResponseDto responseDto = new ResponseDto();
         userService.save(userDto);
