@@ -91,6 +91,8 @@
                     Loading.hide();
                     let resp = response.data;
                     if (resp.success) {
+                        console.log("登录成功：",resp.content);
+                        Tool.setLoginUser(resp.content);
                         _this.$router.push("/welcome")
                     } else {
                         Toast.warning(resp.message);
