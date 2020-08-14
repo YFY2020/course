@@ -140,6 +140,8 @@
                         _this.$router.push("/welcome")
                     } else {
                         Toast.warning(resp.message);
+                        _this.user.password = "";
+                        _this.loadImageCode();
                     }
                 });
             },
