@@ -43,7 +43,7 @@
         <!--生成的表-->
        <!-- <table tableName="test" domainObjectName="Test"/>-->
        <!-- <table tableName="chapter" domainObjectName="Chapter"/>-->
-   <!--     <table tableName="section" domainObjectName="Section"/>-->
+       <!--<table tableName="section" domainObjectName="Section"/>-->
         <!--<table tableName="course" domainObjectName="Course"/>-->
        <!-- <table tableName="category" domainObjectName="Category"/>-->
        <!-- <table tableName="course_category" domainObjectName="CourseCategory"/>-->
@@ -53,7 +53,8 @@
         <!--<table tableName="course_content_file" domainObjectName="CourseContentFile"/>-->
        <!-- <table tableName="user" domainObjectName="User"/>-->
        <!-- <table tableName="resource" domainObjectName="Resource"/>-->
-        <table tableName="role" domainObjectName="Role"/>
+        <!--<table tableName="role" domainObjectName="Role"/>-->
+        <table tableName="role_resource" domainObjectName="RoleResource"/>
 
     </context>
 </generatorConfiguration>
