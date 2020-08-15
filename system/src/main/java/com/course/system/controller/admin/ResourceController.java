@@ -36,18 +36,14 @@ public class ResourceController {
     /**
      * 保存，id有值时更新，无值时新增
      */
-    @PostMapping(value = "/save",produces = {"application/json;charset=UTF-8"})
-    public ResponseDto save(@RequestBody ResourceDto resourceDto){
+    @PostMapping("/save")
+    public ResponseDto save(@RequestBody String jsonStr) {
         // 保存校验
-                    ValidatorUtil.require(resourceDto.getName(), "名称");
-                    ValidatorUtil.length(resourceDto.getName(), "名称", 1, 100);
-                    ValidatorUtil.length(resourceDto.getPage(), "页面", 1, 50);
-                    ValidatorUtil.length(resourceDto.getRequest(), "请求", 1, 200);
+        ValidatorUtil.require(jsonStr, "资源");
 
         ResponseDto responseDto = new ResponseDto();
-        resourceService.save(resourceDto);
-        responseDto.setContent(resourceDto);
-        return  responseDto;
+        resourceService.saveJson(jsonStr);
+        return responseDto;
     }
 
     /**
