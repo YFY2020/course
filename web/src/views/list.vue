@@ -110,7 +110,6 @@
                     }
                 })
             },
-
             /**
              * 点击一级分类时
              * @param level1Id
@@ -126,7 +125,6 @@
                 if (level1Id === "00000000") {
                     _this.level1Id = null;
                 }
-
                 // 点击一级分类时，显示激活状态
                 $("#category-" + level1Id).siblings("a").removeClass("cur");
                 $("#category-" + level1Id).addClass("cur");
@@ -160,7 +158,6 @@
                 // 重新加载课程列表
                 _this.listCourse(1);
             },
-
             /**
              * 点击二级分类时
              * @param level1Id
