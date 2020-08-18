@@ -158,6 +158,7 @@
                 // 重新加载课程列表
                 _this.listCourse(1);
             },
+
             /**
              * 点击二级分类时
              * @param level1Id
