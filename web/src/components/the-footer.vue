@@ -2,10 +2,10 @@
     <footer class="text-muted">
       <div class="container">
         <p class="float-right">
-          <a href="#">Back to top</a>
+          <a href="#">回到顶部</a>
         </p>
-        <p>Album example is © Bootstrap, but please download and customize it for yourself!</p>
-        <p>New to Bootstrap? <a href="https://v4.bootcss.com/">Visit the homepage</a> or read our <a href="/docs/getting-started/introduction/">getting started guide</a>.</p>
+        <p>欢迎使用在线视频课程系统，程序员的梦工厂，致力于全栈技术推广</p>
+        <p>2099&nbsp;imooc.com&nbsp;&nbsp;京ICP备 1234567890号</p>
       </div>
     </footer>
 </template>
