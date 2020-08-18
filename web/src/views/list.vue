@@ -26,14 +26,25 @@
         },
         mounted() {
             let _this = this;
-            _this.listCourse();
+            _this.listCourse(1);
         },
         methods: {
             /**
              * 查询课程列表
              */
-            listCourse() {
+            listCourse(page) {
                 let _this = this;
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/web/course/list', {
+                    page: page,
+                    size: 3,
+                }).then((response) => {
+                    let resp = response.data;
+                    if (resp.success) {
+                        _this.courses = resp.content.list;
+                    }
+                }).catch((response) => {
+                    console.log("error：", response);
+                })
             },
         }
     }
