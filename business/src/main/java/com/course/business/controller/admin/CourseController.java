@@ -29,7 +29,7 @@ public class CourseController {
      * 列表查询
      */
     @PostMapping(value = "/list",produces = {"application/json;charset=UTF-8"})
-    public ResponseDto list(@RequestBody PageDto pageDto){
+    public ResponseDto list(@RequestBody CoursePageDto pageDto){
           ResponseDto responseDto = new ResponseDto();
           courseService.list(pageDto);
           responseDto.setContent(pageDto);
