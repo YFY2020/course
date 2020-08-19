@@ -23,6 +23,62 @@
             </p>
           </div>
         </div>
+
+        <div class="row">
+
+          <!-- 课程内容 & 大章小节 -->
+          <div class="col-md-9">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" href="#info" data-toggle="tab">课程介绍</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#chapter" data-toggle="tab">章节目录</a>
+              </li>
+            </ul>
+
+            <br>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div class="tab-pane active" id="info" v-html="course.content">
+              </div>
+              <div class="tab-pane" id="chapter">
+                <div v-for="(chapter, i) in chapters" class="chapter">
+                  <div v-on:click="doFolded(chapter, i)" class="chapter-chapter">
+                    <span>{{chapter.name}}</span>
+                    <span class="pull-right">
+                      <i v-show="chapter.folded" class="fa fa-plus-square" aria-hidden="true"></i>
+                      <i v-show="!chapter.folded" class="fa fa-minus-square" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                  <div v-show="!chapter.folded">
+                    <table class="table table-striped">
+                      <tr v-for="(s, j) in chapter.sections" class="chapter-section-tr">
+                        <td class="col-sm-8 col-xs-12">
+                          <div v-on:click="play(s)" class="section-title">
+                            <i class="fa fa-video-camera d-none d-sm-inline"></i>&nbsp;&nbsp;
+                            <span class="d-none d-sm-inline">第{{j+1}}节&nbsp;&nbsp;</span>
+                            {{s.title}}
+                            <span v-show="s.charge !== SECTION_CHARGE.CHARGE.key" class="badge badge-primary hidden-xs">免费</span>
+                          </div>
+                        </td>
+                        <td class="col-sm-1 text-right">
+                          <span class="badge badge-primary">{{s.time | formatSecond}}</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 讲师信息 -->
+          <div class="col-md-3">
+          </div>
       </div>
     </div>
   </main>
