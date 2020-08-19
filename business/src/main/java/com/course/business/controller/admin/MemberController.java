@@ -1,13 +1,14 @@
 package com.course.business.controller.admin;
 
-import com.course.server.dto.MemberDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.service.MemberService;
-import com.course.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -31,32 +32,5 @@ public class MemberController {
           memberService.list(pageDto);
           responseDto.setContent(pageDto);
           return  responseDto;
-    }
-
-    /**
-     * 保存，id有值时更新，无值时新增
-     */
-    @PostMapping(value = "/save",produces = {"application/json;charset=UTF-8"})
-    public ResponseDto save(@RequestBody MemberDto memberDto){
-        // 保存校验
-                    ValidatorUtil.length(memberDto.getMobile(), "手机号", 1, 11);
-                    ValidatorUtil.require(memberDto.getPassword(), "密码");
-                    ValidatorUtil.length(memberDto.getName(), "昵称", 1, 50);
-                    ValidatorUtil.length(memberDto.getPhoto(), "头像url", 1, 200);
-
-        ResponseDto responseDto = new ResponseDto();
-        memberService.save(memberDto);
-        responseDto.setContent(memberDto);
-        return  responseDto;
-    }
-
-    /**
-     *删除
-     */
-    @DeleteMapping(value = "/delete/{id}")
-    public ResponseDto delete(@PathVariable String id){
-        ResponseDto responseDto = new ResponseDto();
-        memberService.delete(id);
-        return  responseDto;
     }
 }
