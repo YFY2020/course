@@ -257,7 +257,6 @@
         if (rememberMember) {
           _this.member = rememberMember;
         }
-
         // 显示登录框时就刷新一次验证码图片
         _this.loadImageCode();
 
