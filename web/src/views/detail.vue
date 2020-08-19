@@ -136,6 +136,18 @@
                     }
                 })
             },
+
+            /**
+             * 展开/收缩一个章节
+             * @param chapter
+             */
+            doFolded (chapter, i) {
+                let _this = this;
+                chapter.folded = !chapter.folded;
+                // 在v-for里写v-show，只修改属性不起作用，需要$set
+                _this.$set(_this.chapters, i, chapter);
+            },
+
         }
     }
 </script>
