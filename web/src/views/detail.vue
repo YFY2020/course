@@ -90,13 +90,15 @@
         </div>
       </div>
     </div>
+    <modal-player ref="modalPlayer"></modal-player>
   </main>
 </template>
 
 <script>
+    import ModalPlayer from "../components/modal-player";
     export default {
         name: 'detail',
-
+        components: {ModalPlayer},
         data: function () {
             return {
                 id: "",
@@ -146,6 +148,15 @@
                 chapter.folded = !chapter.folded;
                 // 在v-for里写v-show，只修改属性不起作用，需要$set
                 _this.$set(_this.chapters, i, chapter);
+            },
+
+            /**
+             * 播放视频
+             * @param section
+             */
+            play(section) {
+                let _this = this;
+                _this.$refs.modalPlayer.playVod(section.vod);
             },
 
         }
