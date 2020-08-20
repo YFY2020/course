@@ -252,6 +252,7 @@
       //---------------登录框、注册框、忘记密码框切换-----------------
       toLoginDiv() {
         let _this = this;
+
         // 从缓存中获取记住的用户名密码，如果获取不到，说明上一次没有勾选“记住我”
         let rememberMember = LocalStorage.get(LOCAL_KEY_REMEMBER_MEMBER);
         if (rememberMember) {
