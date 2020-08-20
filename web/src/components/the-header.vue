@@ -31,7 +31,7 @@
               </div>
             </li>
           </ul>
-          <span class="text-white pr-3">欢迎：</span>
+          <span v-show="loginMember.id" class="text-white pr-3">您好：{{loginMember.name}}</span>
           <button  v-on:click="openLoginModal()" class="btn btn-outline-light my-2 my-sm-0">登录/注册</button>
         </div>
       </div>
@@ -52,6 +52,11 @@
             openLoginModal() {
                 let _this = this;
                 _this.$refs.loginComponent.openLoginModal();
+            },
+
+            setLoginMember(loginMember) {
+                let _this = this;
+                _this.loginMember = loginMember;
             },
         }
     }

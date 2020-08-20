@@ -339,7 +339,6 @@
             _this.$parent.setLoginMember(loginMember);
             $("#login-modal").modal("hide");
 
-
           } else {
             Toast.warning(resp.message);
             _this.member.password = "";
