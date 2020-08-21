@@ -6,6 +6,7 @@ import com.course.server.dto.MemberDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.dto.SmsDto;
 import com.course.server.enums.SmsUseEnum;
+import com.course.server.exception.BusinessException;
 import com.course.server.service.MemberService;
 import com.course.server.service.SmsService;
 import com.course.server.util.UuidUtil;
@@ -109,6 +110,26 @@ public class MemberController {
         ResponseDto responseDto = new ResponseDto();
         redisTemplate.delete(token);
         LOG.info("从redis中删除token:{}", token);
+        return responseDto;
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseDto resetPassword(@RequestBody MemberDto memberDto) throws BusinessException {
+        LOG.info("会员密码重置开始:");
+        memberDto.setPassword(DigestUtils.md5DigestAsHex(memberDto.getPassword().getBytes()));
+        ResponseDto<MemberDto> responseDto = new ResponseDto();
+
+        // 校验短信验证码
+        SmsDto smsDto = new SmsDto();
+        smsDto.setMobile(memberDto.getMobile());
+        smsDto.setCode(memberDto.getSmsCode());
+        smsDto.setUse(SmsUseEnum.FORGET.getCode());
+        smsService.validCode(smsDto);
+        LOG.info("短信验证码校验通过");
+
+        // 重置密码
+        memberService.resetPassword(memberDto);
+
         return responseDto;
     }
 }
