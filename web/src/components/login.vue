@@ -392,7 +392,6 @@
           let response = res.data;
           if (response.success) {
             Toast.success("短信已发送");
-
             // 开始倒计时
             _this.countdown = 60;
             _this.setTime(btnId);
@@ -401,7 +400,6 @@
           }
         })
       },
-
       /**
        * 倒计时
        * @param btnId
