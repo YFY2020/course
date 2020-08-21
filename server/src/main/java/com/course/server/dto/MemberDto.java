@@ -47,6 +47,12 @@ public class MemberDto {
      */
     private String imageCodeToken;
 
+    /**
+     * 短信验证码
+     * @return
+     */
+    private String smsCode;
+
     public String getId() {
         return id;
     }
@@ -111,6 +117,14 @@ public class MemberDto {
         this.imageCodeToken = imageCodeToken;
     }
 
+    public String getSmsCode() {
+        return smsCode;
+    }
+
+    public void setSmsCode(String smsCode) {
+        this.smsCode = smsCode;
+    }
+
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("MemberDto{");
@@ -122,6 +136,7 @@ public class MemberDto {
         sb.append(", registerTime=").append(registerTime);
         sb.append(", imageCode='").append(imageCode).append('\'');
         sb.append(", imageCodeToken='").append(imageCodeToken).append('\'');
+        sb.append(", smsCode='").append(smsCode).append('\'');
         sb.append('}');
         return sb.toString();
     }
