@@ -274,7 +274,6 @@
 
       register() {
         let _this = this;
-
         // 提交之前，先校验所有输入框
         // 注意：当有一个文本框校验为false时，其它不校验
         let validateResult = _this.onRegisterMobileBlur() &&
