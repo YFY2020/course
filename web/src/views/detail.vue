@@ -96,6 +96,7 @@
 
 <script>
     import ModalPlayer from "../components/modal-player";
+
     export default {
         name: 'detail',
         components: {ModalPlayer},
@@ -106,6 +107,7 @@
                 teacher: {},
                 chapters: [],
                 sections: [],
+                memberCourse: {},
                 COURSE_LEVEL: COURSE_LEVEL,
                 SECTION_CHARGE: SECTION_CHARGE
             }
@@ -145,7 +147,7 @@
              * 展开/收缩一个章节
              * @param chapter
              */
-            doFolded (chapter, i) {
+            doFolded(chapter, i) {
                 let _this = this;
                 chapter.folded = !chapter.folded;
                 // 在v-for里写v-show，只修改属性不起作用，需要$set
@@ -158,12 +160,57 @@
              */
             play(section) {
                 let _this = this;
-                if (section.charge === _this.SECTION_CHARGE.CHARGE.key ) {
+                if (section.charge === _this.SECTION_CHARGE.CHARGE.key) {
                     Toast.warning("请先登录");
-                }else{
+                } else {
                     _this.$refs.modalPlayer.playVod(section.vod);
                 }
-            }
+            },
+
+            /**
+             * 报名
+             */
+            enroll() {
+                let _this = this;
+                let loginMember = Tool.getLoginMember();
+                if (Tool.isEmpty(loginMember)) {
+                    Toast.warning("请先登录");
+                    return;
+                }
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/web/member-course/enroll', {
+                    courseId: _this.course.id,
+                    memberId: loginMember.id
+                }).then((response)=>{
+                    let resp = response.data;
+                    if (resp.success) {
+                        _this.memberCourse = resp.content;
+                        Toast.success("报名成功！");
+                    } else {
+                        Toast.warning(resp.message);
+                    }
+                });
+            },
+
+            /**
+             * 获取报名
+             */
+            getEnroll() {
+                let _this = this;
+                let loginMember = Tool.getLoginMember();
+                if (Tool.isEmpty(loginMember)) {
+                    console.log("未登录");
+                    return;
+                }
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/web/member-course/get-enroll', {
+                    courseId: _this.course.id,
+                    memberId: loginMember.id
+                }).then((response)=>{
+                    let resp = response.data;
+                    if (resp.success) {
+                        _this.memberCourse = resp.content || {};
+                    }
+                });
+            },
         }
     }
 </script>
