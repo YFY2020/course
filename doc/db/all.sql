@@ -294,24 +294,16 @@ create table resource
 ) engine = innodb
   default charset = utf8 comment ='资源';
 
-insert into resource
-values ('01', '系统管理', null, null, null);
-insert into resource
-values ('0101', '用户管理', '/system/user', null, '01');
-insert into resource
-values ('010101', '保存', null, '["/system/admin/user/list","/system/admin/user/save"]', '0101');
-insert into resource
-values ('010102', '删除', null, '["/system/admin/user/delete"]', '0101');
-insert into resource
-values ('010103', '重置密码', null, '["/system/admin/user/save-password"]', '0101');
-insert into resource
-values ('0102', '资源管理', '/system/resource', null, '01');
-insert into resource
-values ('010201', '保存/显示', null, '["/system/admin/resource"]', '0102');
-insert into resource
-values ('0103', '角色管理', '/system/role', null, '01');
-insert into resource
-values ('010301', 'j角色/权限管理', null, '["/system/admin/role"]', '0103');
+insert into resource values ('00', '欢迎', 'welcome', null, null);
+insert into resource values ('01', '系统管理', null, null, null);
+insert into resource values ('0101', '用户管理', 'system/user', null, '01');
+insert into resource values ('010101', '保存', null, '["/system/admin/user/list","/system/admin/user/save"]', '0101');
+insert into resource values ('010102', '删除', null, '["/system/admin/user/delete"]', '0101');
+insert into resource values ('010103', '重置密码', null, '["/system/admin/user/save-password"]', '0101');
+insert into resource values ('0102', '资源管理', 'system/resource', null, '01');
+insert into resource values ('010201', '保存/显示', null, '["/system/admin/resource"]', '0102');
+insert into resource values ('0103', '角色管理', 'system/role', null, '01');
+insert into resource values ('010301', 'j角色/权限管理', null, '["/system/admin/role"]', '0103');
 
 -- 角色
 drop table if exists role;
@@ -342,25 +334,16 @@ create table role_resource
 ) engine = innodb
   default charset = utf8mb4 comment ='角色资源关联';
 
-insert into role_resource
-values ('00000000', '00000000', '01');
-insert into role_resource
-values ('00000001', '00000000', '0101');
-insert into role_resource
-values ('00000002', '00000000', '010101');
-insert into role_resource
-values ('00000003', '00000000', '010102');
-insert into role_resource
-values ('00000004', '00000000', '010103');
-insert into role_resource
-values ('00000005', '00000000', '0102');
-insert into role_resource
-values ('00000006', '00000000', '010201');
-insert into role_resource
-values ('00000007', '00000000', '0103');
-insert into role_resource
-values ('00000008', '00000000', '010301');
-
+insert into role_resource values ('00000009', '00000000', '00');
+insert into role_resource values ('00000000', '00000000', '01');
+insert into role_resource values ('00000001', '00000000', '0101');
+insert into role_resource values ('00000002', '00000000', '010101');
+insert into role_resource values ('00000003', '00000000', '010102');
+insert into role_resource values ('00000004', '00000000', '010103');
+insert into role_resource values ('00000005', '00000000', '0102');
+insert into role_resource values ('00000006', '00000000', '010201');
+insert into role_resource values ('00000007', '00000000', '0103');
+insert into role_resource values ('00000008', '00000000', '010301');
 
 -- 角色用户
 drop table if exists role_user;
