@@ -267,7 +267,6 @@
         for (let i = 0; i < 30; i += 1) {
           d2.push([i + 1, 1900 + Math.floor((Math.random()*100)+1)]);
         }
-
         let sales_charts = $('#sales-charts').css({'width':'100%' , 'height':'220px'});
         $.plot("#sales-charts", [
           { label: "最近30天", data: d1 },
