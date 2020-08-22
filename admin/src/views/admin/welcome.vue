@@ -136,7 +136,6 @@
               <i class="ace-icon fa fa-star orange"></i>
               课程销售排名
             </h4>
-
           </div>
 
           <div class="widget-body">
