@@ -127,6 +127,9 @@
                     _this.chapters = _this.course.chapters || [];
                     _this.sections = _this.course.sections || [];
 
+                    //获取报名信息
+                    _this.getEnroll();
+
                     // 将所有的节放入对应的章中
                     for (let i = 0; i < _this.chapters.length; i++) {
                         let c = _this.chapters[i];
